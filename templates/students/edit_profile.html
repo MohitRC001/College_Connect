@@ -1,0 +1,127 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+{% comment %} <div class="max-w-2xl mx-auto mt-10">
+
+    {% if messages %}
+    <div class="mb-4">
+        {% for message in messages %}
+            <div class="alert alert-success">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="card shadow-xl p-6">
+        <h2 class="text-2xl font-bold mb-4">Edit Profile</h2>
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <h3 class="text-xl font-semibold mt-4 mb-2">User Info</h3>
+            {{ user_form.as_p }}
+
+            <h3 class="text-xl font-semibold mt-4 mb-2">Student Info</h3>
+            {{ student_form.as_p }}
+
+            <button class="btn btn-primary mt-4 w-full">Save Changes</button>
+        </form>
+    </div>
+</div> {% endcomment %}
+
+
+{% load form_tags %}
+
+<div class="max-w-3xl mx-auto mt-10">
+
+    {% if messages %}
+    <div class="mb-4">
+        {% for message in messages %}
+            <div class="alert alert-success shadow-lg">
+                <span>{{ message }}</span>
+            </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="card shadow-xl bg-base-100 p-8 border border-gray-200 rounded-2xl">
+        
+        <div class="flex items-center gap-4 mb-6">
+            <!-- Profile Avatar -->
+            <div class="avatar">
+                <div class="w-20 h-20 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2 overflow-hidden">
+                    <img src="{{ request.user.student.profile_image.url }}" alt="Profile Picture">
+                </div>
+            </div>
+
+            <div>
+                <h2 class="text-3xl font-bold">{{ request.user.get_full_name }}</h2>
+                <p class="text-gray-500">Edit your profile details</p>
+            </div>
+        </div>
+
+        <form method="POST" enctype="multipart/form-data" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {% csrf_token %}
+
+            <!-- USER FORM -->
+            <div class="col-span-2">
+                <h3 class="text-lg font-semibold mb-2 border-b pb-1">User Information</h3>
+            </div>
+
+            <div>
+                <label class="label font-semibold">First Name</label>
+                <input class="input input-bordered w-full" type="text" name="first_name" value="{{ user_form.first_name.value|default_if_none:'' }}">
+            </div>
+
+            <div>
+                <label class="label font-semibold">Last Name</label>
+                <input class="input input-bordered w-full" type="text" name="last_name" value="{{ user_form.last_name.value|default_if_none:'' }}">
+            </div>
+
+            <div class="col-span-2">
+                <label class="label font-semibold">Email</label>
+                <input class="input input-bordered w-full" type="email" name="email" value="{{ user_form.email.value|default_if_none:'' }}">
+            </div>
+
+            <!-- STUDENT FORM -->
+            <div class="col-span-2 mt-4">
+                <h3 class="text-lg font-semibold mb-2 border-b pb-1">Student Information</h3>
+            </div>
+
+            <div class="col-span-2">
+                <label class="label font-semibold">Bio</label>
+                <textarea class="textarea textarea-bordered w-full" name="bio">{{ student_form.bio.value|default_if_none:'' }}</textarea>
+            </div>
+
+            <div>
+                <label class="label font-semibold">Course</label>
+                {{ student_form.course|add_class:"select select-bordered w-full" }}
+            </div>
+
+            <div>
+                <label class="label font-semibold">Year</label>
+                {{ student_form.year|add_class:"select select-bordered w-full" }}
+            </div>
+
+            <div class="col-span-2">
+                <label class="label font-semibold">Mobile</label>
+                <input class="input input-bordered w-full" type="text" name="mobile" value="{{ student_form.mobile.value|default_if_none:'' }}">
+            </div>
+
+            <div class="col-span-2">
+                <label class="label font-semibold">Profile Image</label>
+                <input class="file-input file-input-bordered w-full" type="file" name="profile_image">
+            </div>
+
+            <!-- SUBMIT BUTTON -->
+            <div class="col-span-2 mt-4">
+                <button class="btn btn-primary w-full text-lg">Save Changes</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+
+
+{% endblock %}

@@ -1,0 +1,82 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<h2 class="text-2xl font-bold mb-4">Explore Students</h2>
+
+<form method="GET" class="mb-6 grid grid-cols-1 md:grid-cols-4 gap-4">
+
+    <!-- Filter by Skill -->
+    <select name="skill" class="select select-bordered">
+        <option value="">Filter by Skill</option>
+        {% for sk in skills %}
+        <option value="{{ sk.id }}">{{ sk.name }}</option>
+        {% endfor %}
+    </select>
+
+    <!-- Filter by Interest -->
+    <select name="interest" class="select select-bordered">
+        <option value="">Filter by Interest</option>
+        {% for it in interests %}
+        <option value="{{ it.id }}">{{ it.name }}</option>
+        {% endfor %}
+    </select>
+
+    <!-- Course -->
+    <input type="text" name="course" class="input input-bordered" placeholder="Course">
+
+    <!-- Year of Study -->
+    <input type="text" name="year" class="input input-bordered" placeholder="Year">
+
+    <!-- College -->
+    <input type="text" name="college" class="input input-bordered" placeholder="College">
+
+    <button class="btn btn-primary col-span-full">Apply Filters</button>
+</form>
+
+
+
+<!-- Display Students -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    {% for student in students %}
+    <div class="card shadow-lg border p-4 flex flex-col items-center text-center">
+
+        <!-- Profile Image -->
+        <img src="{{ student.profile_image.url }}" 
+            alt="Profile Picture" 
+            class="w-24 h-24 rounded-full object-cover mb-3 shadow-md">
+
+        <!-- Student Name -->
+        <h3 class="font-bold text-lg">{{ student.get_full_name }}</h3>
+
+        <p>Course: {{ student.course }}</p>
+        <p>Year: {{ student.year }}</p>
+        <p>College: {{ student.college }}</p>
+
+        <!-- Skills -->
+        <p class="mt-2">
+            <strong>Skills:</strong>
+            {% for sk in student.skills.all %}
+                <span class="badge badge-primary">{{ sk.name }}</span>
+            {% endfor %}
+        </p>
+
+        <!-- Interests -->
+        <p class="mt-2">
+            <strong>Interests:</strong>
+            {% for it in student.interests.all %}
+                <span class="badge badge-secondary">{{ it.name }}</span>
+            {% endfor %}
+        </p>
+
+        <a href="{% url 'view_profile' student.uid %}" 
+        class="btn btn-outline btn-sm mt-4">
+        View Profile
+        </a>
+    </div>
+
+    {% endfor %}
+</div>
+
+
+{% endblock %}

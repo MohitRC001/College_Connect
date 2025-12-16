@@ -1,0 +1,85 @@
+{% load static tailwind_tags %} {% load static %} {% load static %} {% load form_tags %}
+
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{% block title %}Document{% endblock %}</title>
+        <link rel="stylesheet" href="{% static 'style.css' %}" />
+        {% tailwind_css %}
+    </head>
+    <body data-theme="light">
+        {% comment %} --------------- Header field --------------- {% endcomment%}
+        <header>
+            {% comment %} --------------- Navbar field --------------- {%endcomment %}
+            <div class="navbar bg-base-100 shadow-sm">
+                {% comment %} --------------- Logo --------------- {% endcomment%}
+                <div class="flex-1">
+                    <a class="btn btn-ghost text-xl">CollegeConnect</a>
+                </div>
+
+                {% comment %} --------------- Nav Links --------------- {%endcomment %}
+                <div class="flex-none">
+                    <ul class="menu menu-horizontal px-1">
+                        <li>
+                            <a href="{% url 'home' %}" class="btn btn-ghost"
+                                >Home</a
+                            >
+                        </li>
+                        <li><a href="#" class="btn btn-ghost">Search</a></li>
+                        {% if user.student.uid %}
+                            <li><a href="{% url 'chat_home' %}" class="btn btn-ghost">Chat</a></li>
+                        {% endif %}
+                        <li><a href="{% url 'explore_students' %}" class="btn btn-ghost">Explore</a></li>
+                        {% if user.is_authenticated %}
+                            <li>
+                                <details>
+                                    <summary class="btn btn-ghost">Notifications</summary>
+                                    <ul class="bg-base-100 rounded-t-none p-2">
+                                        <li><a href="{% url 'sent_follow_requests' %}">Sent Requests</a></li>
+                                        <hr>
+                                        <li><a href="{% url 'received_follow_requests' %}" >Received Requests</a></li>
+                                    </ul>
+                                </details>
+                            </li>
+                            {% if user.student.uid %}
+                                <li><a href="{% url 'profile' %}" class="btn btn-ghost">Profile</a></li>
+                            {% endif %}
+                            <li>
+                            <form
+                                action="{% url 'logout' %}"
+                                method="post"
+                                class="p-0"
+                            >
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-ghost hover:bg-red-800 hover:text-white">
+                                    Logout
+                                </button>
+                            </form>
+                            {% else %}
+                            <a href="{% url 'login' %}" class="btn btn-ghost hover:bg-green-800"
+                                >Login</a
+                            >
+                            {% endif %}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </header>
+
+        {% comment %} --------------- Main Field --------------- {%endcomment %}
+        <main
+            class="min-h-screen flex flex-col justify-center items-center gap-2 p-2"
+        >
+            {% block content %}
+            <h1>Layout</h1>
+            {% endblock %}
+        </main>
+
+        {% comment %} --------------- Footer Links --------------- {%endcomment %}
+        <footer class="py-6 text-center text-gray-600">
+        © {{ year }} CollegeConnect · All rights reserved
+    </footer>
+    </body>
+</html>

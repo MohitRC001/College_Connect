@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+    {% comment %} --------------- Followers --------------- {% endcomment %}
+    <h1 class="text-2xl font-bold">Followers</h1>
+
+    {% comment %} --------------- Follower Container --------------- {% endcomment %}
+    <div class=" border border-black shadow-lg w-[80%] rounded-xl p-4">
+        {% if followers %}
+        
+            {% for follower in followers %}
+            {% comment %} --------------- Follower --------------- {% endcomment %}
+            <div class="w-full flex justify-between items-center rounded-md shadow-md border p-2 my-2">
+
+                {% comment %} --------------- Followers Profile Image --------------- {% endcomment %}
+                <div class="space-x-2">
+                    <div class="avatar">
+                        <div class="w-12 rounded-full">
+                            <img src="{{follower.profile_image.url}}" />
+                        </div>
+                    </div>
+                    <a href="{% url 'view_profile' follower.uid %}">{{follower}}</a>
+                </div>
+                {% comment %} --------------- Remove Follower --------------- {% endcomment %}
+                <div>
+                    <a href="{% url 'remove_follower' follower.uid %}" class="btn bg-red-700 text-white">Remove</a>
+                </div>
+            </div>
+            {% endfor %}
+
+        {% else %}
+            <span>No Followers Yet</span>
+        {% endif %}
+
+    </div>
+
+{% endblock %}

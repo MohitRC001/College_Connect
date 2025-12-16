@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+    {% comment %} --------------- Following Heading --------------- {% endcomment %}
+    <h1 class="text-2xl font-bold">Followings</h1>
+
+    {% comment %} --------------- Followings Container --------------- {% endcomment %}
+    <div class=" border border-black shadow-lg w-[80%] rounded-xl p-4">
+        {% if followings %}
+        
+            {% for following in followings %}
+            {% comment %} --------------- Follower --------------- {% endcomment %}
+            <div class="w-full flex justify-between items-center rounded-md shadow-md border p-2 my-2">
+
+                {% comment %} --------------- Followings Profile Image --------------- {% endcomment %}
+                <div class="space-x-2">
+                    <div class="avatar">
+                        <div class="w-12 rounded-full">
+                            <img src="{{following.profile_image.url}}" />
+                        </div>
+                    </div>
+                    <a href="{% url 'view_profile' following.uid %}">{{following}}</a>
+                </div>
+                {% comment %} --------------- Unfollow --------------- {% endcomment %}
+                <div>
+                    <a href="{% url 'unfollow' following.uid %}?next=followings" class="btn bg-red-700 text-white">Unfollow</a>
+                </div>
+            </div>
+            {% endfor %}
+
+        {% else %}
+            <span>No Following Yet</span>
+        {% endif %}
+
+    </div>
+
+{% endblock %}

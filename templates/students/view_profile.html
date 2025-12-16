@@ -1,0 +1,93 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+    <div class=" border border-black shadow-lg w-[80%] rounded-xl p-4">
+
+        {% comment %} --------------- Student Profile --------------- {% endcomment %}
+        <div class="w-full flex justify-evenly items-start gap-4 p-2">
+
+            {% comment %} --------------- Profile Image Field --------------- {% endcomment %}
+            <figure class="grow flex justify-center">
+                <div class="avatar max-w-70 grow">
+                    <div class="ring-primary ring-offset-base-100 rounded-full ring-2 ring-offset-2 text-center w-full">
+                        <img src="{{student.profile_image.url}}" />
+                    </div>
+                </div>
+            </figure>
+
+            {% comment %} --------------- Profile Info Field --------------- {% endcomment %}
+            <div class="grow-2 space-y-1">
+                <h2 class=" text-3xl font-bold">{{student.user.username}}</h2>
+                <h2 class=" text-lg">{{student.user.first_name}} {{student.user.last_name}}</h2>
+                <p>{{student.bio}}</p>
+                <p>College : <b>College Name</b></p>
+                <p class="space-x-4"><span>Course : <b>{{student.course}}</b></span><span>Year : <b>{{student.year}}</b></span></p>
+                
+                {% comment %} --------------- Followers/ Followings --------------- {% endcomment %}
+                <div class="stats shadow">
+
+                    <div class="stat place-items-center">
+                        <div class="stat-title">Following</div>
+                        <div class="stat-value ">{{following}}</div>
+                    </div>
+                
+                    <div class="stat place-items-center">
+                        <div class="stat-title">Followers</div>
+                        <div class="stat-value text-secondary">{{followers}}</div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        {% comment %} --------------- Follow/ Unfollow Button --------------- {% endcomment %}
+        {% if not user.is_staff %}
+            <div class=" w-full flex justify-evenly items-center gap-2 mt-8">
+                {% if follow_request_status == 'pending'  %}
+                    <a href="{% url 'delete_follow_requests' student.uid %}" class=" btn btn-primary grow">Pending | Cancel Request</a>
+                {%  elif follow_request_status == 'accepted' %} 
+                    <a href="{% url 'unfollow' student.uid %}" class=" btn btn-primary grow">Unfollow</a>
+                {% else %}
+                    <a href="{% url 'send_follow_requests' student.uid %}" class=" btn btn-primary grow">Follow</a>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div> 
+
+
+    <div class=" border border-black shadow-lg w-[80%] rounded-xl p-4">
+        <h2 class="font-bold text-xl">Skills</h2>
+        <ul>
+            {% for skill in student.skills.all %}
+                <li class="badge badge-primary m-1">{{ skill.name }}</li>
+            {% empty %}
+                <p>No skills added.</p>
+            {% endfor %}
+        </ul>
+
+        <h2 class="font-bold text-xl mt-4">Interests</h2>
+        <ul>
+            {% for interest in student.interests.all %}
+                <li class="badge badge-secondary m-1">{{ interest.name }}</li>
+            {% empty %}
+                <p>No interests added.</p>
+            {% endfor %}
+        </ul>
+
+        <h2 class="font-bold text-xl mt-4">Experience</h2>
+        <ul class="space-y-2">
+            {% for exp in student.experiences.all %}
+                <li class="p-3 border rounded-lg">
+                    <p class="font-bold">{{ exp.title }}</p>
+                    <p class="text-sm">{{ exp.description }}</p>
+                    <p class="text-xs opacity-70">Years: {{ exp.years }}</p>
+                </li>
+            {% empty %}
+                <p>No experience yet.</p>
+            {% endfor %}
+        </ul>
+
+    </div>
+
+{% endblock %}

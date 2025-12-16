@@ -1,0 +1,97 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    
+
+{% load static %}
+{% load form_tags %}
+
+<div class="min-h-screen flex justify-center items-center bg-base-200">
+    <div class="card w-full max-w-2xl shadow-xl bg-base-100 p-6">
+
+        <h1 class="text-3xl font-bold mb-6 text-center">Create an Account</h1>
+
+        <form method="POST" enctype="multipart/form-data" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {% csrf_token %}
+
+            <!-- USER INFO -->
+            <div class="col-span-2"><h3 class="font-semibold text-lg border-b pb-1">User Information</h3></div>
+
+            <div>
+                <label class="label font-semibold">First Name</label>
+                {{ user_form.first_name|add_class:"input input-bordered w-full" }}
+            </div>
+
+            <div>
+                <label class="label font-semibold">Last Name</label>
+                {{ user_form.last_name|add_class:"input input-bordered w-full" }}
+            </div>
+
+            <div class="col-span-2">
+                <label class="label font-semibold">Email</label>
+                {{ user_form.email|add_class:"input input-bordered w-full" }}
+            </div>
+
+            <div class="col-span-2">
+                <label class="label font-semibold">Username</label>
+                {{ user_form.username|add_class:"input input-bordered w-full" }}
+            </div>
+            
+            <div>
+                <label class="label font-semibold">Password</label>
+                {{ user_form.password1|add_class:"input input-bordered w-full" }}
+            </div>
+            
+            <div>
+                <label class="label font-semibold">Confirm Password</label>
+                {{ user_form.password2|add_class:"input input-bordered w-full" }}
+            </div>
+            
+            <!-- STUDENT INFO -->
+            <div class="col-span-2"><h3 class="font-semibold text-lg border-b pb-1 mt-4">Student Information</h3></div>
+            
+            <div class="col-span-2">
+                <label class="label font-semibold">College</label>
+                {{ student_form.college|add_class:"input input-bordered w-full" }}
+            </div>
+
+            <div>
+                <label class="label font-semibold">Course</label>
+                {{ student_form.course|add_class:"select select-bordered w-full" }}
+            </div>
+
+            <div>
+                <label class="label font-semibold">Year</label>
+                {{ student_form.year|add_class:"select select-bordered w-full" }}
+            </div>
+
+            <div class="col-span-2">
+                <label class="label font-semibold">Mobile</label>
+                {{ student_form.mobile|add_class:"input input-bordered w-full" }}
+            </div>
+
+            <div class="col-span-2">
+                <label class="label font-semibold">Bio</label>
+                {{ student_form.bio|add_class:"textarea textarea-bordered w-full" }}
+            </div>
+
+            <div class="col-span-2">
+                <label class="label font-semibold">Profile Image</label>
+                <input type="file" name="profile_image" class="file-input file-input-bordered w-full" />
+            </div>
+
+            <div class="col-span-2 mt-4">
+                <button class="btn btn-primary w-full text-lg">Register</button>
+            </div>
+        </form>
+
+        <p class="text-center mt-4">
+            Already have an account? 
+            <a href="{% url 'login' %}" class="link link-primary">Login</a>
+        </p>
+
+    </div>
+</div>
+
+
+{% endblock %}

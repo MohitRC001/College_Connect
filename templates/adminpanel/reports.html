@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+
+{% load static %}
+
+<div class="max-w-5xl mx-auto mt-10 bg-white p-6 shadow rounded-xl">
+    <h1 class="text-2xl font-bold mb-6">Admin Reports</h1>
+
+    <h2 class="text-xl font-semibold">Student Overview</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+
+        <div class="card bg-blue-100 p-4 rounded shadow">
+            <p class="text-xl font-bold">{{ total_students }}</p>
+            <p class="text-gray-700">Total Students</p>
+        </div>
+
+        <div class="card bg-green-100 p-4 rounded shadow">
+            <p class="text-xl font-bold">{{ with_skills }}</p>
+            <p class="text-gray-700">Students with Skills</p>
+        </div>
+
+        <div class="card bg-purple-100 p-4 rounded shadow">
+            <p class="text-xl font-bold">{{ with_interests }}</p>
+            <p class="text-gray-700">Students with Interests</p>
+        </div>
+
+        <div class="card bg-orange-100 p-4 rounded shadow">
+            <p class="text-xl font-bold">{{ pending_requests }}</p>
+            <p class="text-gray-700">Pending Follow Requests</p>
+        </div>
+
+    </div>
+
+    <h2 class="text-xl font-semibold mt-10">Students by Course</h2>
+    <ul class="mt-2">
+        {% for item in by_course %}
+            <li>{{ item.course }} — {{ item.count }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2 class="text-xl font-semibold mt-10">Top 10 Most Followed Students</h2>
+    <ul class="mt-2">
+        {% for s in most_followed %}
+            <li>{{ s.user.get_full_name }} ({{ s.follow_count }} followers)</li>
+        {% endfor %}
+    </ul>
+
+    <hr class="my-6">
+
+    {% comment %} <a href="{% url 'export_report_pdf' %}" class="btn btn-primary">Export as PDF</a> {% endcomment %}
+    {% comment %} <a href="{% url 'export_report_excel' %}" class="btn btn-accent">Export as Excel</a> {% endcomment %}
+</div>
+
+
+{% endblock %}

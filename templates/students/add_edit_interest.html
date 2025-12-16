@@ -1,0 +1,39 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+{% comment %} <div class="max-w-md mx-auto p-6 bg-base-200 rounded-xl">
+    <h2 class="text-xl font-bold mb-4">Edit Skill</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.name.label }}
+        <input type="text" name="name" class="input input-bordered w-full mb-3" required>
+
+        <button class="btn btn-primary w-full">Add Skill</button>
+    </form>
+</div> {% endcomment %}
+
+
+<div class="max-w-md mx-auto p-6 bg-base-200 rounded-xl">
+    
+    <h2 class="text-xl font-bold mb-4">
+        {% if form.instance.pk %}
+            Edit Interest 
+        {% else %}
+            Add Interest
+        {% endif %}
+    </h2>
+    <form method="POST" class="card p-6 shadow">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-primary w-full mt-3">
+            {% if form.instance.pk %}
+                Update 
+            {% else %}
+                Add
+            {% endif %}
+        </button>
+    </form>
+</div> 
+
+{% endblock %}

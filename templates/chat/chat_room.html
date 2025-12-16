@@ -1,0 +1,118 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+{% load static %}
+
+<div class="max-w-3xl w-full mx-auto bg-white shadow-xl rounded-2xl overflow-hidden">
+
+    <!-- Header -->
+    <div class="flex items-center gap-3 px-6 py-4 border-b bg-gray-50">
+        <img src="{{ other.profile_image.url }}" class="w-12 h-12 rounded-full object-cover border">
+        <h2 class="text-xl font-semibold">Chat with {{ other.user.get_full_name }}</h2>
+    </div>
+
+    <!-- Chat Box -->
+    <div id="chatBox" 
+         class="h-[500px] overflow-y-auto px-6 py-4 bg-gray-100 space-y-2 scroll-smooth">
+
+        {% for msg in room.messages.all %}
+            {% if msg.sender == me %}
+                <!-- Sender Message -->
+                <div class="flex justify-end">
+                    <div class="bg-blue-600 text-white px-4 py-2 rounded-xl max-w-xs shadow">
+                        {{ msg.text }}
+                        <div class="text-[10px] opacity-70 text-right mt-1">
+                            {{ msg.timestamp|time:"h:i A" }}
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <!-- Receiver Message -->
+                <div class="flex justify-start">
+                    <div class="bg-gray-300 text-gray-900 px-4 py-2 rounded-xl max-w-xs shadow">
+                        {{ msg.text }}
+                        <div class="text-[10px] opacity-70 text-left mt-1">
+                            {{ msg.timestamp|time:"h:i A" }}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <!-- Input Box -->
+    <div class="flex items-center gap-3 p-4 border-t bg-white">
+        <input id="messageInput"
+               type="text"
+               placeholder="Type a message..."
+               class="input input-bordered w-full rounded-xl"/>
+
+        <button id="sendBtn" 
+                class="btn bg-blue-600 hover:bg-blue-700 text-white rounded-xl px-6">
+            Send
+        </button>
+    </div>
+
+</div>
+
+<!-- WebSocket Script -->
+<script>
+    const roomId = "{{ room.uid }}";
+    const senderId = "{{ me.uid }}";
+
+    const chatSocket = new WebSocket(
+        "ws://" + window.location.host + "/ws/chat/" + roomId + "/"
+    );
+
+    const chatBox = document.getElementById("chatBox");
+    const messageInput = document.getElementById("messageInput");
+    const sendBtn = document.getElementById("sendBtn");
+
+    // Auto scroll to bottom
+    function scrollToBottom() {
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+    scrollToBottom();
+
+    chatSocket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        const isMine = data.sender === senderId;
+
+        const wrap = document.createElement("div");
+        wrap.className = isMine ? "flex justify-end" : "flex justify-start";
+
+        wrap.innerHTML = `
+            <div class="${
+                isMine ? "bg-blue-600 text-white" : "bg-gray-300 text-gray-900"
+            } px-4 py-2 rounded-xl max-w-xs shadow">
+                ${data.message}
+            </div>
+        `;
+
+        chatBox.appendChild(wrap);
+        scrollToBottom();
+    };
+
+    sendBtn.onclick = sendMessage;
+    messageInput.addEventListener("keypress", e => {
+        if (e.key === "Enter") sendMessage();
+    });
+
+    function sendMessage() {
+        const msg = messageInput.value.trim();
+        if (!msg) return;
+
+        chatSocket.send(JSON.stringify({
+            message: msg,
+            sender: senderId
+        }));
+
+        messageInput.value = "";
+    }
+</script>
+
+
+
+
+{% endblock %}

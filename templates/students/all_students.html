@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+    {% for student in students %}
+    <div class="w-3xl card border border-white rounded-md p-4">
+        {{student.username}}
+    </div>
+    {% endfor %}
+
+{% endblock %}

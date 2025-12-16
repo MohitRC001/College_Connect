@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class=" shadow-md shadow-black w-[60vw]">
+    <div class=" max-h-screen min-h-[80vh]">
+        {% for student in user.student.followers.all %}
+            <div class="w-full flex justify-between items-center rounded-md shadow-md border p-2 my-2">
+
+                {% comment %} --------------- Followers Profile Image --------------- {% endcomment %}
+                <div class="space-x-2">
+                    <div class="avatar">
+                        <div class="w-12 rounded-full">
+                            <img src="{{student.profile_image.url}}" />
+                        </div>
+                    </div>
+                    <a href="{% url 'view_profile' student.uid %}">{{student}}</a>
+                </div>
+                {% comment %} --------------- Remove Follower --------------- {% endcomment %}
+                <div>
+                    <a href="{% url 'chat_room' student.uid %}" class="btn bg-primary text-white">Chat</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

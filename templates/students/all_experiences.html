@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+    {% comment %} --------------- Heading --------------- {% endcomment %}
+    <h1 class="text-2xl font-bold">experiences</h1>
+
+    {% comment %} --------------- Skill Container --------------- {% endcomment %}
+    <div class=" border border-black shadow-lg w-[80%] rounded-xl p-4">
+        <div class="flex justify-between items-center ">
+
+            <a href="{% url 'profile' %}" class="btn btn-ghost float-right mb-4">  Back</a>
+            <a href="{% url 'add_experience' %}" class="btn btn-primary float-right mb-4">Add experience</a>
+        </div>
+        {% for exp in user.student.experiences.all %}
+
+        <div class="w-full flex justify-between items-center rounded-md shadow-md border p-2 my-2">
+            <li class="badge badge-primary m-1">{{ exp.title }}</li>
+                
+            {% comment %} --------------- Edit/ Delete --------------- {% endcomment %}
+            <div>
+                <a href="{% url 'edit_experience' exp.id %}" class="btn btn-warning text-white">Edit</a>
+                <a href="{% url 'delete_experience' exp.id %}" class="btn bg-red-800 text-white">Delete</a>
+            </div>
+            </div>
+        {% empty %}
+            <p>No experience yet.</p>
+        {% endfor %}
+
+    </div>
+
+{% endblock %}
