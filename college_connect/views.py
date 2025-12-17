@@ -50,12 +50,34 @@ def export_report_pdf(request):
 
     p.drawString(100, 800, "Admin Report")
 
+    by_course = Student.objects.values("course").annotate(count=models.Count("uid"))
+
     y = 760
     stats = [
+        f"Student Overview :-",
         f"Total Students: {Student.objects.count()}",
+        f"Students with Skills: {Student.objects.filter(skills__isnull=False).distinct().count()}",
+        f"Students with Interests: {Student.objects.filter(interests__isnull=False).distinct().count()}",
         f"Pending Requests: {FollowRequest.objects.filter(status='pending').count()}",
         f"Accepted Requests: {FollowRequest.objects.filter(status='accepted').count()}",
+        f" ",
+        f"Students By Course :-",
     ]
+
+    for item in by_course:
+        stats.append(f"{item['course']}: {item['count']}")
+
+    stats.extend([" ", "Top 10 Most Followed Students :-"])
+
+    most_followed = (
+        Student.objects.annotate(follow_count=models.Count("followers"))
+        .order_by("-follow_count")[:10]
+    )
+
+    for s in most_followed:
+        stats.append(f"{s.get_full_name()}: {s.followers.count()} followers")
+
+    p.setFont("Times-Roman", 16)
 
     for line in stats:
         p.drawString(80, y, line)

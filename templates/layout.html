@@ -28,41 +28,46 @@
                             >
                         </li>
                         <li><a href="#" class="btn btn-ghost">Search</a></li>
-                        {% if user.student.uid %}
-                            <li><a href="{% url 'chat_home' %}" class="btn btn-ghost">Chat</a></li>
-                        {% endif %}
                         <li><a href="{% url 'explore_students' %}" class="btn btn-ghost">Explore</a></li>
                         {% if user.is_authenticated %}
-                            <li>
-                                <details>
-                                    <summary class="btn btn-ghost">Notifications</summary>
-                                    <ul class="bg-base-100 rounded-t-none p-2">
-                                        <li><a href="{% url 'sent_follow_requests' %}">Sent Requests</a></li>
-                                        <hr>
-                                        <li><a href="{% url 'received_follow_requests' %}" >Received Requests</a></li>
-                                    </ul>
-                                </details>
-                            </li>
-                            {% if user.student.uid %}
+                            {% if user.is_staff %}
+                                <li><a href="/admin" class="btn btn-ghost">Admin Pannel</a></li>
+                                <li><a href="{% url 'admin_reports' %}" class="btn btn-ghost">Report</a></li>
+                            {% else %}
+                                <li><a href="{% url 'chat_home' %}" class="btn btn-ghost">Chat</a></li>
+                                <li>
+                                    <details>
+                                        <summary class="btn btn-ghost">Notifications</summary>
+                                        <ul class="bg-base-100 rounded-t-none p-2">
+                                            <li><a href="{% url 'sent_follow_requests' %}">Sent Requests</a></li>
+                                            <hr>
+                                            <li><a href="{% url 'received_follow_requests' %}" >Received Requests</a></li>
+                                        </ul>
+                                    </details>
+                                </li>
                                 <li><a href="{% url 'profile' %}" class="btn btn-ghost">Profile</a></li>
                             {% endif %}
                             <li>
-                            <form
-                                action="{% url 'logout' %}"
-                                method="post"
-                                class="p-0"
-                            >
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-ghost hover:bg-red-800 hover:text-white">
-                                    Logout
-                                </button>
-                            </form>
-                            {% else %}
+                                <form
+                                    action="{% url 'logout' %}"
+                                    method="post"
+                                    class="p-0"
+                                >
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-ghost hover:bg-red-800 hover:text-white">
+                                        Logout
+                                    </button>
+                                </form>
+                            </li>
+                        {% else %}
+                        <li>
                             <a href="{% url 'login' %}" class="btn btn-ghost hover:bg-green-800"
                                 >Login</a
                             >
-                            {% endif %}
                         </li>
+                        {% endif %}
+                        
+                        
                     </ul>
                 </div>
             </div>
