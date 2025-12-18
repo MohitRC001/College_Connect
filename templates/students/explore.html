@@ -26,7 +26,13 @@
     <input type="text" name="course" class="input input-bordered" placeholder="Course">
 
     <!-- Year of Study -->
-    <input type="text" name="year" class="input input-bordered" placeholder="Year">
+    {% comment %} <input type="text" name="year" class="input input-bordered" placeholder="Year"> {% endcomment %}
+    <select name="year" class="select select-bordered">
+        <option value="">Filter by Year</option>
+        {% for year in years %}
+        <option value="{{ year.value }}">{{ year.label }}</option>
+        {% endfor %}
+    </select>
 
     <!-- College -->
     <input type="text" name="college" class="input input-bordered" placeholder="College">

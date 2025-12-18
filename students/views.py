@@ -32,6 +32,10 @@ def register(request):
             # Create student record
             student = student_form.save(commit=False)
             student.user = user
+
+            if not student.profile_image:
+                student.profile_image = "default/profile.png"
+            
             student.save()
 
             messages.success(request, "Your account has been created!")
@@ -346,7 +350,7 @@ def add_interest(request):
         if form.is_valid():
             interest, created = Interest.objects.get_or_create(name=form.cleaned_data['name'])
             request.user.student.interests.add(interest)
-            return redirect('all_interests')
+            return redirect('profile')
     else:
         form = InterestForm()
 
@@ -386,7 +390,7 @@ def add_experience(request):
             exp = form.save(commit=False)
             exp.student = request.user.student
             exp.save()
-            return redirect('all_experiences')
+            return redirect('profile')
     else:
         form = ExperienceForm()
 
@@ -458,7 +462,7 @@ def explore_students(request):
         students = students.filter(course=course)
 
     if year:
-        students = students.filter(year_of_study=year)
+        students = students.filter(year=year)
 
     if college:
         students = students.filter(college=college)
@@ -470,6 +474,7 @@ def explore_students(request):
         "students": students,
         "skills": Skill.objects.all(),
         "interests": Interest.objects.all(),
+        "years": [{"value":"FY", "label":"First Year"}, {"value":"SY", "label":"Second Year"}, {"value":"TY", "label":"Third Year"}]
     }
 
     return render(request, "students/explore.html", context)

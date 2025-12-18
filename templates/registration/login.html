@@ -8,11 +8,11 @@
             Student Login
         </h2>
 
-        {% if messages %}
+        {% comment %} {% if messages %}
             {% for msg in messages %}
                 <div class="alert alert-error mb-4">{{ msg }}</div>
             {% endfor %}
-        {% endif %}
+        {% endif %} {% endcomment %}
 
         <form method="POST">
             {% csrf_token %}

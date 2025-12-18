@@ -14,8 +14,9 @@ class BaseModel(models.Model):
 
 
 
+
 class Skill(models.Model):
-    name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=100, unique=True)
 
     def __str__(self):
         return self.name
@@ -32,7 +33,7 @@ class Experience(models.Model):
     student = models.ForeignKey("Student", on_delete=models.CASCADE, related_name="experiences")
     title = models.CharField(max_length=100)  
     description = models.TextField(blank=True)
-    years = models.IntegerField(default=0)
+    years = models.FloatField(default=0)
 
     def __str__(self):
         return f"{self.title} ({self.student.user.username})"

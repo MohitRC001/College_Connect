@@ -20,22 +20,56 @@ from .models import *
 
 
 
-class SkillForm(forms.ModelForm):
-    class Meta:
-        model = Skill
-        fields = ['name']
+# class SkillForm(forms.ModelForm):
+#     class Meta:
+#         model = Skill
+#         fields = ['name']
+#         widgets = {
+#             'name': forms.TextInput(attrs={'autofocus': True}),
+#         }
 
 
-class InterestForm(forms.ModelForm):
-    class Meta:
-        model = Interest
-        fields = ['name']
+
+class SkillForm(forms.Form):
+    name = forms.CharField(
+        max_length=100,
+        label="Skill Name",
+        widget=forms.TextInput(attrs={
+            'class': 'input input-bordered w-full',
+            'placeholder': 'Enter skill name',
+            'autofocus': True
+        })
+    )
+
+# class InterestForm(forms.ModelForm):
+#     class Meta:
+#         model = Interest
+#         fields = ['name']
+#         widgets = {
+#             'name': forms.TextInput(attrs={'autofocus': True}),
+#         }
+
+
+class InterestForm(forms.Form):
+    name = forms.CharField(
+        max_length=100,
+        label="Interest Name",
+        widget=forms.TextInput(attrs={
+            'class': 'input input-bordered w-full',
+            'placeholder': 'Enter interest',
+            'autofocus': True
+        })
+    )
+
 
 
 class ExperienceForm(forms.ModelForm):
     class Meta:
         model = Experience
         fields = ['title', 'description', 'years']
+        widgets = {
+            'title': forms.TextInput(attrs={'autofocus': True}),
+        }
 
 
 
